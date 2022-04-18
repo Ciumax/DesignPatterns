@@ -1,0 +1,25 @@
+<?php
+
+interface OldXmlFilesHandler
+{
+    public function createXml();
+}
+class NewXmlFilesHandler
+{
+    public function newXml()
+    {
+        echo "I created new XML file";
+    }
+}
+class XmlAdapter implements OldXmlFilesHandler
+{
+    public function createXml()
+    {
+        $adapter = new NewXmlFilesHandler();
+        $adapter->newXml();
+    }
+}
+
+$client = new XmlAdapter();
+$client->createXml();
+?>
