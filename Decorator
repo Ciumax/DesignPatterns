@@ -1,0 +1,69 @@
+<?php 
+interface Food
+{
+    public function getPrice();
+}
+
+final class BasePizza implements Food
+{
+    public $price = 40;
+    public function getPrice()
+    {
+        return $this->price;
+    }
+}
+
+final class PizzaWithSalami implements Food
+{
+    private $offer;
+
+    public function __construct(Food $offer)
+    {
+        $this->offer = $offer;
+    }
+
+    public function getPrice()
+    {
+        return $this->offer->getPrice() + 10;
+    }
+}
+
+final class PizzaWithExtraCheese implements Food
+{
+    private $offer;
+
+    public function __construct(Food $offer)
+    {
+        $this->offer = $offer;
+    }
+
+    public function getPrice()
+    {
+        return $this->offer->getPrice() + 5;
+    }
+}
+
+final class PizzaInDiscount implements Food
+{
+    private $offer;
+
+    public function __construct(Food $offer)
+    {
+        $this-> offer = $offer;
+    }
+
+    public function getPrice()
+    {
+        return $this->offer->getPrice() - 10;
+    }
+}
+
+$pizza = new BasePizza();
+$pizzaWS = new PizzaWithSalami($pizza);
+$pizzaWEC = new PizzaWithExtraCheese($pizza);
+$pizzaDC = new PizzaInDiscount($pizza);
+echo "Discount Pizza: " . $pizzaDC->getPrice();
+echo "\nNormal pizza: " . $pizza->getPrice();
+echo "\nPizza with salami: " . $pizzaWS->getPrice();
+
+?>
