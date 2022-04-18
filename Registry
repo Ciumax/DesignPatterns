@@ -1,0 +1,71 @@
+<?php 
+//REGISTRY
+class A
+{
+   public $valueA = 12;
+
+   public function sayA()
+   {
+       echo $this->valueA;
+   }
+}
+class B
+{
+    public $valueB = 145;
+
+    public function sayB()
+    {
+       echo $this->valueB;
+    }
+}
+
+class Registry
+{
+    private static $instance;
+    
+  public static function getInstance()
+   {
+       if(self::$instance == null) self::$instance = new Registry();
+       return self::$instance;
+   }
+    private static $objects = array();
+    private function __construct()
+    {
+    }
+        
+    public function __get($key)
+    {
+        if(isset(self::$objects[$key]) == false)
+        { 
+            throw new Exception('Data not in registry');
+        }
+        return self::$objects[$key];
+    }
+
+    public function __set($object, $value)
+    {
+        self::$objects[$object] = $value;
+    }
+}
+
+try
+{
+    $testObjectOne = new A();
+    $testObjectTwo = new B();
+
+    $registry = Registry::getInstance();
+
+    $registry->a = $testObjectOne;
+    $registry->b = $testObjectTwo;
+
+    $testHolder = $registry->a;
+    $testHolder->sayA();
+    Registry::getInstance()->b->sayB();
+
+}
+catch(Exception $e)
+{
+    echo $e->getMessage();
+}
+
+?>
