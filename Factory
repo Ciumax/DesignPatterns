@@ -1,0 +1,80 @@
+<?php
+
+interface User 
+{
+  public function showTheNr();
+}
+
+final class PrivatePerson implements User
+{
+    private $pesel;
+
+    public function __construct($peselNr)
+    {
+        $this->pesel = $peselNr;
+    }
+    public function showTheNr()
+    {
+        echo "\n" . $this->pesel;
+    }
+}
+
+final class Company implements User
+{
+    private $nip;
+
+    public function __construct($nipNumber)
+    {
+        $this->nip = $nipNumber;
+    }
+    public function showTheNr()
+    {
+        echo "\n" . $this->nip;
+    }
+}
+
+interface UserFactory
+{
+    public function createForm($data);
+}
+
+final class MultiUserTypeFactory implements UserFactory
+{
+    public function createForm($data)
+    {
+        if(array_key_exists('nip', $data))
+        {
+            echo "created Company";
+            return new Company($data['nip']);
+        }
+        if(array_key_exists('pesel', $data))
+        {
+            echo "created PrivatePerson";
+            return new PrivatePerson($data['pesel']);
+        }
+
+        throw new InvalidArgumentException("No data to create User");
+    }
+}
+final class UserRegisterService
+{
+    private $userFactory;
+
+    public function __construct(UserFactory $factory)
+    {
+        $this->userFactory = $factory;
+    }
+    public function register(array $data)
+    {
+        $user = $this->userFactory->createForm($data);
+        $user->showTheNr();
+    }
+}
+
+$UserRegister = new UserRegisterService(new MultiUserTypeFactory);
+$tempData = array("pesel" => 90112123456);
+$tempDataSecond = array("nip" => 51234344);
+$UserRegister->register($tempData);
+$UserRegister->register($tempDataSecond);
+
+?>
