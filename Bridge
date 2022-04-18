@@ -1,0 +1,61 @@
+<?php
+
+interface Formatter
+{
+    public function format(string $text);
+}
+
+class PlainTextFormatter implements Formatter
+{
+    public function format(string $text)
+    {
+        return $text;
+    }
+}
+
+class HtmlFormatter implements Formatter
+{
+    public function format(string $text)
+    {
+        return sprintf('<p>%s</p>', $text);
+    }
+}
+
+abstract class Service 
+{
+    public function __construct(protected Formatter $implementation)
+    {
+
+    }
+
+    public function setImplementation(Formatter $printer)
+    {
+        $this->implementation = $printer;
+    }
+
+    abstract public function get(): string; 
+}
+
+class HelloWorldService extends Service
+{
+    public function get(): string
+    {
+        return $this->implementation->format('Hello World');
+    }
+}
+
+class PingService extends Service
+{
+    public function get(): string
+    {
+        return $this->implementation->format('pong');
+    }
+}
+
+$serviceTest = new HelloWorldService(new PlainTextFormatter);
+echo $serviceTest->get();
+$serviceTestHtml = new HelloWorldService(new HtmlFormatter);
+echo $serviceTestHtml->get();
+$serviceTestPong = new PingService(new PlainTextFormatter);
+echo $serviceTestPong->get();
+?>
