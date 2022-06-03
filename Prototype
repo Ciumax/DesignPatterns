@@ -17,15 +17,15 @@ abstract class Item
     	return $this->metalType;
 	}
     
-	public function getLethality()
+    	public function getLethality()
 	{
     	return $this->lethality;
 	}
 
-    public function setLethality($lethality)
-    {
+   	public function setLethality($lethality)
+   	{
         $this->lethality = $lethality;
-    }
+        }
     
 	public function getNoOfHandsNeeded()
 	{
@@ -66,8 +66,8 @@ function test()
 	$axe = new TwoHandAxe();
     
 	$clonedAxe = clone $axe;
-    $clonedSword = clone $sword;
-    $clonedSword->setLethality("Deadly");
+        $clonedSword = clone $sword;
+        $clonedSword->setLethality("Deadly");
 	$clonedAxe->setMetalType("Iron/wood");
 	echo $clonedAxe->getMetalType();
 	echo $clonedSword->getLethality();
